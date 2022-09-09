@@ -2,7 +2,7 @@
 
 function Settingbar() {
     return (
-      <div className="toolbar">
+      <div className="setting-bar">
       
       </div>
     );
