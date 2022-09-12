@@ -26,8 +26,10 @@ export default class Brush extends Tool{
         }
     }
     draw(x,y){
+        // this.ctx.lineWidth =1;
+        // this.ctx.strokeStyle = '#000000';
         this.ctx.lineTo(x,y)
         this.ctx.stroke()
-        console.log('brush') 
+     
     }
 }

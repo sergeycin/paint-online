@@ -1,0 +1,75 @@
+.toolbar {
+  height: 40px;
+  background-color: white;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  position: absolute;
+  width: 100%;
+  -webkit-box-shadow: 0 4px 5px gray;
+          box-shadow: 0 4px 5px gray;
+  z-index: 999999999;
+}
+
+.toolbar_btn {
+  width: 25px;
+  height: 25px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-size: cover;
+  margin-left: 10px;
+}
+
+.toolbar .brush {
+  background: url("../assets/brush.png") no-repeat center center;
+}
+
+.toolbar .rect {
+  background: url("../assets/rect.png") no-repeat center center;
+}
+
+.toolbar .eraser {
+  background: url("../assets/eraser.png") no-repeat center center;
+}
+
+.toolbar .line {
+  background: url("../assets/line.png") no-repeat center center;
+}
+
+.toolbar .politra {
+  background: url("../assets/politra.png") no-repeat center center;
+}
+
+.toolbar .undo {
+  margin-left: auto;
+  background: url("../assets/undo.png") no-repeat center center;
+}
+
+.toolbar .redo {
+  background: url("../assets/redo.png") no-repeat center center;
+}
+
+.toolbar .save {
+  margin-right: 10px;
+  background: url("../assets/save.png") no-repeat center center;
+}
+
+.setting-bar {
+  height: 40px;
+  background-color: white;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  position: absolute;
+  width: 100%;
+  -webkit-box-shadow: 0 4px 5px gray;
+          box-shadow: 0 4px 5px gray;
+  top: 40px;
+}
