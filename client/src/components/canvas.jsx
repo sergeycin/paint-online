@@ -8,7 +8,8 @@ import Modal from 'react-bootstrap/Modal';
 import '../styles/canvas.scss'
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-
+import Brush from '../tools/Brush';
+import toolState from '../store/toolState';
 const Canvas = observer(() => {
   const params = useParams()
   const canvasRef= useRef()
@@ -30,6 +31,7 @@ const Canvas = observer(() => {
       const socket = new WebSocket(`ws://localhost:8000/`)
       canvasState.setSocket(socket)
       canvasState.setSessionId(params.id)
+      toolState.setTool(new Brush(canvasRef.current,socket,params.id))
       socket.onopen = () =>{
 
         socket.send(JSON.stringify({
@@ -58,7 +60,14 @@ const Canvas = observer(() => {
   },[canvasState.username])
 
   const drawHandler = (msg) =>{
+    const figure = msg.figure
+    const ctx = canvasRef.current.getContext('2d')
 
+    switch (figure.type){
+      case 'brush':
+        Brush.draw(ctx,figure.x,figure.y)
+        break
+    }
   }
 
 

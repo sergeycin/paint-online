@@ -20,17 +20,25 @@ export default class Brush extends Tool{
         this.ctx.beginPath()
         this.ctx.moveTo(e.pageX - e.target.offsetLeft, e.pageY - e.target.offsetTop)
     }
-    mouseMoveHandler(e){
-        if(this.mouseDown){
-            
-            this.draw(e.pageX - e.target.offsetLeft, e.pageY - e.target.offsetTop)
+    mouseMoveHandler(e) {
+        if (this.mouseDown) {
+            // this.draw(e.pageX - e.target.offsetLeft, e.pageY - e.target.offsetTop)
+            this.socket.send(JSON.stringify({
+                method: 'draw',
+                id: this.id,
+                figure: {
+                    type: 'brush',
+                    x: e.pageX - e.target.offsetLeft,
+                    y: e.pageY - e.target.offsetTop
+                }
+            }))
         }
     }
-    draw(x,y){
+  static  draw(ctx,x,y){
         // this.ctx.lineWidth =1;
         // this.ctx.strokeStyle = '#000000';
-        this.ctx.lineTo(x,y)
-        this.ctx.stroke()
+        ctx.lineTo(x,y)
+        ctx.stroke()
      
     }
 }
