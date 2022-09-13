@@ -9,18 +9,32 @@ import '../styles/canvas.scss'
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Brush from '../tools/Brush';
+import Rect from '../tools/Rect';
 import toolState from '../store/toolState';
+import { set } from 'mobx';
+import axios from 'axios'
+
 const Canvas = observer(() => {
   const params = useParams()
   const canvasRef= useRef()
   const userNameRef = useRef()
   const [modal,setModal] = useState(true)
-
+  const [users,setUsers] = useState('')
 
 
   useEffect(()=>{
     
     canvasState.setCanvas(canvasRef.current)
+    let ctx = canvasRef.current.getContext('2d')
+    axios.get(`http://localhost:8000/image?id=${params.id}`).then(response =>{
+      const img = new Image()
+        img.src = response.data
+        img.onload = () =>{
+            ctx.clearRect(0,0,canvasRef.current.width,canvasRef.current.height)
+          ctx.drawImage(img,0,0,canvasRef.current.width,canvasRef.current.height)
+        
+        }
+    } )
 
   },[])
 
@@ -37,7 +51,8 @@ const Canvas = observer(() => {
         socket.send(JSON.stringify({
           id: params.id,
           username: canvasState.username,
-          method: "connection"
+          method: "connection",
+
         }))
       }
 
@@ -45,6 +60,8 @@ const Canvas = observer(() => {
         let msg = JSON.parse(event.data)
           switch(msg.method){
               case "connection":
+                let textusers = `Пользователь ${msg.username} подключился`
+                setUsers(prev => [...prev, <p>{textusers}</p>])
                 console.log(`Пользователь ${msg.username} подключился`)
                 break
                 case "draw":
@@ -67,12 +84,20 @@ const Canvas = observer(() => {
       case 'brush':
         Brush.draw(ctx,figure.x,figure.y)
         break
+       case 'rect':
+        Rect.staticdraw(ctx,figure.x,figure.y,figure.width,figure.height,figure.color)
+        break 
+        case "finish":
+          ctx.beginPath()
+          break
     }
   }
 
 
   const mouseeDownHandler = () =>{
     canvasState.pushToUndo(canvasRef.current.toDataURL())
+    axios.post(`http://localhost:8000/image?id=${params.id}`,{img: canvasRef.current.toDataURL()})
+    .then(res => console.log(res))
   }
   
   const connectHandler = () =>{
@@ -81,7 +106,12 @@ const Canvas = observer(() => {
   }
 
   return (
+    
     <div className="canvas">
+      <div className="canvas__users">
+      {users}
+      </div>
+    
         <Modal show={modal} onHide={() => {}}>
         <Modal.Header closeButton>
           <Modal.Title>Введите ваше имя</Modal.Title>
